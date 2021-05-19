@@ -9,7 +9,7 @@ services:
       cloud:
       dmz:
     ports:
-      - "8000:5432"
+      - "10000:10000"
 
   proxy-splunk-backend:
     build:
