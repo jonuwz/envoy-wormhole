@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+
+  proxy-splunk-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy-frontend
+    networks:
+      cloud:
+      dmz:
+    ports:
+      - "8000:5432"
+
+  proxy-splunk-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy-backend
+    networks:
+      trusted:
+      dmz:
+        aliases:
+        - proxy-splunk-backend.home.local
+
+  splunk:
+    image: splunk/splunk:latest
+    networks:
+      trusted:
+    environment:
+      - "SPLUNK_START_ARGS=--accept-license"
+      - "SPLUNK_PASSWORD=password"
+
+networks:
+  dmz:
+    name: dmz
+  cloud:
+    name: cloud
+  trusted:
+    name: trusted
